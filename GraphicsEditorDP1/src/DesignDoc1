@@ -1,0 +1,31 @@
+Voor het opstellen van de window van het programma zal Java Swing worden gebruikt.
+De window zelf is een instantie van de JFrame-klasse. Daarbinnen is een JPanel waarin alle knoppen aanwezig zijn
+waarmee meerdere gereedschappen of het soort vorm dat getekend moet worden gekozen kan worden.
+
+Alle knoppen staan bovenaan, en daaronder wordt de DrawingArea geplaatst waarin getekend kan worden, die aangeroepen
+wordt binnen de window. In de DrawingArea-klasse worden de functies gedefiniëerd voor het klikken op de knoppen.
+
+De DrawingArea-klasse erft de JComponent klasse, waarmee het ook over de repaint() functie beschikt. 
+Elke keer als er iets verandert in de DrawingArea, dan moet repaint() worden aangeroepen om het beeld te verversen. 
+Alle vormen op het scherm worden gegenereerd in een instantie van Image, die bij elke verversing wordt aangeroepen.
+Aanpassingen aan de Image worden gemaakt door middel van Graphics2D, waarmee bijvoorbeeld vormen op een image kunnen
+worden getekend. 
+
+Elke vorm bestaat uit een XY coördinaat, en een hoogte/breedte. Daarnaast heeft elke vorm een kleur en is het een type
+vorm. Deze attributen zijn gedefiniëerd in de Shape-klasse. De DrawingArea bevat dan een ArrayList van Shapes. Elke keer
+als repaint() aangeroepen wordt, doorloopt het programma elke Shape en tekent een vorm op het scherm gebaseerd op de
+attributen van de Shape. Door op de Clear-knop te drukken worden alle Shapes in de lijst en op het scherm verwijderd.
+
+Shapes kunnen geselecteerd worden door middel van de Select tool. De Select tool maakt een transparante vierhoek Shape
+net zoals je normaal een vierhoek zou tekenen. Nadat de muisknop losgelaten is, wordt er gekeken door middel van een
+AABB collision check welke andere Shapes zich binnen de oppervlakte van de selectie Shape bevinden. Deze Shapes worden
+dan gemarkeerd als selected, door middel van een boolean attribuut binnen de Shape-klasse. Shapes die selected zijn
+krijgen na een repaint een gestreepte grens om aan te geven dat ze geselecteerd zijn. Als de gebruiker dan op een
+geselecteerde shape klikt en rond sleept, dan zal de XY positie van de Shape veranderen gebaseerd op waar de muis wordt
+gesleept.
+
+Als er tenminste een geselecteerde vorm is, dan wordt er ook een expansie-vierhoek zichtbaar gemaakt. Dit is een speciale
+vierhoek die als je er op klikt en rondsleept, het de breedte en hoogte van alle geselecteerde vormen aanpast.
+
+De expansie-vierhoek is niet meer zichtbaar en de vormen krijgen ook hun normale rand als de gebruiker ergens anders op
+het scherm klikt waar geen vorm is, of van gereedschap verandert. 

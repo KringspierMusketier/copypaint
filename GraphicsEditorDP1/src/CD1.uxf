@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="14.3.0">
+  <zoom_level>10</zoom_level>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>0</x>
+      <y>120</y>
+      <w>270</w>
+      <h>400</h>
+    </coordinates>
+    <panel_attributes>DrawingArea
+--
+_-EXPAND_RECT_SIZE: int = 10_
+_-EXPAND_RECT_COLOR: Color = red_
+_-SELECT_COLOR: Color_
+_-DASHED_STROKE: Stroke_
+
+-image: Image
+-g2: Graphics2D
+-currentX, currentY, oldX, oldY, offsetX, 
+offsetY: int
+-shapes: ArrayList&lt;Shape&gt;
+-expandRect: Shape
+-selectedShape: ShapeType
+-selectedTool: Tool
+-dragging, expanding: boolean
+--
++selectClear(): void
++selectRectangle(): void
++selectEllipse(): void
++selectDraw(): void
++selectSelect(): void
++selectRed(): void
++selectBlack(): void
+-AABBcheck(a: int[], b: int[]): boolean
+-clearSelected(): void</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>30</x>
+      <y>610</y>
+      <w>200</w>
+      <h>230</h>
+    </coordinates>
+    <panel_attributes>Shape
+--
+-coords: int[]
+-shapeType: ShapeType
+-color: Color
+-selected: boolean
+-oldXY: Point
+-oldWH: Point
+--
++getCoords(): int[]
++setX(int x): void
++setY(int y): void
++setXY(Point xy): void
++setSelected(boolean s): void
+...getters and setters...</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>500</x>
+      <y>160</y>
+      <w>270</w>
+      <h>200</h>
+    </coordinates>
+    <panel_attributes>SwingPanel
+--
+_-WINDOW_X: int = 1024_
+_-WINDOW_Y: int = 768_
+_-WINDOW_TITLE: String = "Copypaint"_
+
+-clearBtn, redBtn, blackBtn, rectBtn, ellBtn,
+drawBtn, selectBtn: JButton
+-window: DrawingArea
+-actionListener: ActionListener
+--
+-main(args: String[])
+-show(): void</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>290</x>
+      <y>520</y>
+      <w>140</w>
+      <h>110</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;enumeration&gt;&gt;
+ShapeType
+--
+Rectangle
+Ellipse
+Select_Rect
+Expand_Rect</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>50</x>
+      <y>0</y>
+      <w>100</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;enumeration&gt;&gt;
+Tool
+--
+Draw
+Select</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>60</x>
+      <y>70</y>
+      <w>30</w>
+      <h>70</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;..</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;50.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>200</x>
+      <y>10</y>
+      <w>290</w>
+      <h>100</h>
+    </coordinates>
+    <panel_attributes>/JComponent/
+--
+-mouseListener: MouseAdapter
+--
++addMouseListener(m: MouseAdapter): void
++repaint(): void
+#paintComponent(g: Graphics): void
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>260</x>
+      <y>100</y>
+      <w>70</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>50.0;10.0;10.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>450</x>
+      <y>380</y>
+      <w>280</w>
+      <h>100</h>
+    </coordinates>
+    <panel_attributes>MouseAdapter
+--
+&lt;&lt;event&gt;&gt;
++mousePressed(e: MouseEvent): void
++mouseReleased(e: MouseEvent): void
++mouseDragged(e: MouseEvent): void</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>260</x>
+      <y>210</y>
+      <w>260</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+m1=1
+m2=1</panel_attributes>
+    <additional_attributes>240.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>120</x>
+      <y>510</y>
+      <w>50</w>
+      <h>120</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+m1=1
+m2=1..*</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;100.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>120</x>
+      <y>560</y>
+      <w>190</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;..</panel_attributes>
+    <additional_attributes>170.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>260</x>
+      <y>410</y>
+      <w>210</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+m1=1
+m2=1</panel_attributes>
+    <additional_attributes>10.0;10.0;190.0;10.0</additional_attributes>
+  </element>
+</diagram>
