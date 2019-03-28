@@ -1,0 +1,55 @@
+Om shapes te kunnen groeperen, is het composite pattern uitermate geschikt. Zo moet je meerdere shapes
+kunnen selecteren en vervolgens groeperen. Dus wanneer één shape in de groep wordt geselecteerd of aangepast,
+dan worden die aanpassingen doorgevoerd aan alle andere shapes in de groep. Uiteindelijk resulteert dit
+in een tree-structure waarmee je te maken hebt met meerdere groep-objecten die meerdere tak-objecten bevatten.
+
+Om dit te realizeren moet de Shape-klasse opgedeeld worden in twee klasses: een leaf-klasse die de positie/kleur/
+vorm van de Shape bevat (oftewel een ShapeLeaf), en een groep-klasse die een lijst van ShapeLeaf-objecten bevat,
+maar zelf geen visuele attributen heeft (oftewel een ShapeGroup). Veranderingen doorgevoerd aan een Leaf gebeurt 
+zoals normaal, terwijl doorgevoerde veranderingen aan een Group dit moet doorgeven aan de Leafs die het bevat.
+Om het mogelijk maken dat een doorgevoerde Shape of een Leaf of een Group kan zijn, moeten beide afstammen van een
+abstracte Shape-klasse, die alleen functies bevat voor het aanpassen of de Shape geselecteerd of zichtbaar is, en een
+abstracte print() functie die de informatie van de huidige Shape uit moet printen voor de save-functie.
+
+De groep functionaliteit moet verder ook worden doorgevoerd aan de StagingShapes. Daarvoor moeten StagingShapes ook
+gesplitst worden in StagingShapeLeaf en StagingShapeGroup klasses die beide van een abstract StagingShape klasse
+erven. Dus wanneer er een ShapeGroup geselecteerd wordt, wordt er een StagingShapeGroup daarop aangemaakt.
+
+De groeperings-functie kan werken door te kijken naar alle geselecteerde ShapeLeafs, die toe te voegen aan een nieuw
+gemaakt ShapeGroup-object, de geselecteerde ShapeLeafs te verwijderen uit de centrale Shapes lijst, en in plaats
+daarvan de nieuwe ShapeGroup toe te voegen. Voor een undo of een ungroup functie wordt simpelwegs het tegenovergestelde
+gedaan waarin de ShapeGroup zelf uit Shapes wordt verwijderd maar al zijn inhoud apart wordt toegevoegd aan de lijst.
+
+Voor de paintComponent functie waarbij de Shapes echt op het scherm worden getekend is het niet van belang om een 
+ShapeGroup te leveren, dus daarbij is een functie handig voor een ShapeGroup die alle inhoud als een lijst van ShapeLeafs
+teruggeeft.
+
+Om groepen te faciliteren moet de file I/O ook wat aangepast worden. In lijn met de eisen uitgelijnd in de opdracht,
+moet dus wanneer een ShapeGroup uitgeprint wordt eerst een lijn geprint worden die aangeeft "group X" waarbij X
+het aantal items in de Group zelf is. Daarna moeten alle navolgende elementen van de groep een extra tab character
+voor elke lijn hebben om aan te geven dat ze bij een groep horen, dus voor een Leaf die in een Group zit binnen
+een Group print de Leaf eerst twee tabs uit voor de attributen van zich zelf.
+
+Om zo een tree uit te printen is een recursieve loop wel een passende functie. Wanneer de print functie voor een Group
+wordt aangeroepen, wordt er een lijst van Strings aangemaakt, en bovenaan een lijn die "group X" print. Daarna wordt
+voor elke Shape in de Group de print() functie aangeroepen die een lijst van Strings teruggeeft. Voor elke lijn die
+teruggegeven wordt (dus alles dat deel is van de Group) wordt er een tab character gezet. Dus een Group binnen een Group
+zet twee tabs voor zijn inhoud. Vervolgens wordt alles teruggegeven als een lijst van Strings.
+
+Voor het inladen van deze bestanden moet er voornamelijk gekeken worden wat een gewone Leaf is en wat uitmaakt van een
+Group. Voordat door elke ingelezen lijn wordt gekeken, wordt er een Stack aangemaakt voor ShapeGroups. Elke keer dat er
+een lijn begint met "group", wordt er een nieuwe ShapeGroup aangemaakt en toegevoegd aan de Stack. Vervolgens wordt
+geteld met hoeveel tab characters een lijn begint. Als de aantal tabs gelijk is aan de grootte van de Stack, dan wordt 
+de Leaf of Group gedefiniëerd in de huidige lijn aangemaakt en toegevoegd aan de ShapeGroup bovenaan de Stack. Als een
+lijn met drie tabs begint, dan kun je aannemen dat daarvoor drie ShapeGroups waren aangemaakt, en dat deze lijn toebehoort
+aan de meest recent aangemaakte Group (de Group bovenaan de Stack).
+
+Wanneer het aantal tabs van de huidige lijn kleiner is dan de grootte van de Stack, dan kunnen we aannemen dat er verder
+geen elementen toebehoren aan de Group bovenaan de Stack. De Group bovenaan de Stack wordt gepopt, en toegevoegd aan de
+nieuwe Group bovenaan de Stack. Als er geen Groups meer zijn in de Stack wanneer een Group wordt gepopt, dan wordt de
+gepopte ShapeGroup toegevoegd aan de centrale lijst van Shapes. Deze laatste Group maakt dus geen deel uit van een andere
+Group. Wanneer een lijn voor een Leaf geen voorgaande tab characters heeft, dan kunnen we aannemen dat het een losse 
+ShapeLeaf is die per direct aan de centrale Shapes lijst toegevoegd kan worden. 
+
+P.S.: De Commands voor het veranderen van tools/colors/shapes/selecteren zijn verwijderd omdat ze niet heel zichtbare veranderingen 
+waren en dus heel wat geklik op Undo/Redo vereisten voordat je de veranderingen van de shapes zelf kon ontdoen
