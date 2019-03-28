@@ -1,0 +1,21 @@
+De Visitor pattern laat je een operatie splitsen van een object. Als je een nieuwe functie wilt toevoegen aan een familie
+van objecten die dezelfde interface implementeren, dan zou dit veel refactoring benodigen aan de interface en de concrete
+klassen. In plaats daarvan kun je het Visitor pattern gebruiken om alle nieuwe operaties in een aparte klasse op te slaan.
+
+Een Visitor pattern heeft twee interfaces nodig. Één om een functie te definiëren voor de concrete klassen om de operatie 
+van de Visitor te accepteren, en een andere interface die definiëert welke types objecten de Visitor een operatie voor kan
+sturen. In dit geval kan de abstracte Shape klasse een Operation interface implementeren (die in beide ShapeLeaf en ShapeGroup
+worden gedefiniëerd), en moeten er aparte Visitor klasses worden gemaakt voor de operaties voor het bewegen, resizen,
+en opslaan van Shapes.
+
+Elke Visitor implementeert dan OperationVisitor, waaronder twee visit() functies moeten staan die voor beide ShapeLeaf en
+ShapeGroup de logica voor het bewegen/resizen/opslaan bevatten. Sommige Visitors returnen iets of vereisen invoer. Omdat
+het rommelig is om voor elk soort return type een aparte accept() functie te zetten in de Shape child klasses, kan er 
+gewoon een generic worden gebruikt in de Operation en OperationVisitor interfaces. Het soort type dat gereturnd moet worden
+wordt alleen gedefiniëerd in de Visitor klasses in plaats van overal. Voor de operations die niets returnen kan gewoon
+Void (niet-primitief) gereturnd worden zonder dat de compiler zeurt dat hij iets verwacht voor deze functie.
+
+De operaties in de Visitors zelf worden aangeroepen door de accept() functie in een van beide Shape klasses aan te roepen
+met een new instance van een van de drie Visitors als input. Op deze manier kunnen wat instanceof checks vermeden worden in
+de Commands. De abstracte Shape klasse moet wel wat aangepast worden aangezien een print() functie overbodig is als een
+van de Visitors daar de logica al voor bevat. 
