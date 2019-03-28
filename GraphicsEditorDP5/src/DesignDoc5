@@ -1,0 +1,28 @@
+Met de strategy pattern kan de operatie van een functie in runtime veranderd worden. Het context-object bevat dan een Strategy object die
+een aantal functies van een interface implementeert waarin de eigenlijke logica voor een functie zich bevindt. Het context-object roept
+deze functie van de strategy op met zijn eigen call functie, die door de main loop kan worden aangeroepen. Maar op runtime kan het
+context-object meerdere soorten strategys bevatten die de interface-functies op hun eigen manier implementeren, zodat in de main
+loop niet allerlei logica hoeft te staan voor meerdere operaties. Deze wordt bij de creatie van het Context-object gedefiniëerd.
+
+In dit geval moeten er Strategy-objecten komen voor het bewegen en resizen van een Rectangle en een Ellipse. Dus eigenlijk wordt de
+logica in paintComponent() van DrawingArea voor elke soort vorm verplaatst naar zijn eigen klasse met een call naar een draw() functie
+in de ShapeLeaf, die zelf verwijst naar de draw() functie van zijn strategy. De juiste soort Strategy moet dan worden meegegeven bij
+de creatie van een ShapeLeaf. Als argument moet de draw() functie ook de ShapeLeaf zelf meegeven zodat de Strategy toegang heeft tot
+de coördinaten en kleur van de Shape Leaf, en het Graphics2D object zelf van DrawingArea moet worden meegegeven om de
+drawRect()/drawOval() functies voor het tekenen van rechthoeken en ellipsen respectievelijk uit te kunnen voeren. Daarnaast moet elke
+Strategy ook een toString() functie leveren, die simpelwegs een constante lower-case String voor elk soort vorm per Strategy returnt.
+
+Volgens de Strategy interface moet er dan een draw(ShapeLeaf leaf, Graphics2D g2) en een toString() functie komen, en twee klassen
+voor een ellips en een vierhoek die deze functies implementeren. Aangezien de Strategies zelf niet worden aangepast op runtime, is
+het onnodig om elke keer een nieuwe StrategyObject te moeten instantiëren wanneer je een nieuwe ShapeLeaf aanmaakt. Vandaar kunnen
+de Strategys ook singletons zijn. Dus ze bevatten een static instance van zichzelf, maar kunnen niet door andere klassen worden
+geïnstantieerd omdat de constructor private is. Om de Strategy op te halen zou je een getInstance() functie moeten aanroepen die
+deze static instance teruggeeft. Dus in principe wordt elke Strategy alleen maar één keer geïnstantieerd en wordt altijd naar deze
+instantie verwezen bij de creatie van een ShapeLeaf.
+
+In vorige versies werden de ShapeType enums gebruikt om de ShapeType van een ShapeLeaf aan te geven en om de huidige geselecteerde
+tekenvorm aan te geven. Echter heeft dit niet heel veel zin omdat er alleen voor de ShapeType werd gecheckt by het tekenen en van het
+schrijven naar de file, dus in plaats van ShapeTypes kunnen ShapeLeafs een verwijzing naar een Strategy hebben, die zelf een functie
+heeft voor het tekenen en het schrijven van de soort vorm naar de file. Hoewel kan de ShapeType enum wel voor elke vorm een verwijzing
+hebben naar de juiste Strategy die met een functie gereturnd kan worden. Dus het selecteren van de tekenvorm soort gebeurt met de enum,
+en bij een DrawCommand wordt de Strategy van het huidige geselecteerde ShapeType teruggegeven worden.
