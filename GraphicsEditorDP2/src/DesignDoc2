@@ -1,0 +1,41 @@
+Om acties te kunnen terughalen (undoing) of opnieuw doen na een undo (redo), is het Command pattern daarvoor uitermate geschikt.
+Elke actie die je kan doen wordt vervolgens als een Command in een stack opgeslagen. Als je iets wilt undo-en, dan wordt het
+tegenovergestelde in dat Command uitgevoerd. Elke Command beschikt dan over een functie die iets uitvoert en een andere
+functie die de veranderingen van de eerste functie terugdraait. Daarom moet een Command ook de objecten opslaan waarmee een operatie 
+wordt uitgevoerd, zodat een Command ook de veranderingen kan terugdraaien bij een undo. Een Command roept dan alleen een functie op in 
+een andere klasse. Hiervoor heb je vervolgens nodig:
+
+-Een Command interface die alle Commands implementeren
+-Een CommandManager object waarnaar de Commands worden gepasseerd en opgeslagen in een stack voor undo's
+-Een Command voor elke actie die je kan undo-en
+-Een klasse die aangeroepen wordt waarin de gewenste veranderingen uitgevoerd worden
+
+In het kader van het programma zal het als voort gaan. Alles wat betreft het houden van data in DrawingArea wordt naar een andere
+klasse verplaatst genaamd de Receiver die als Model moet fungeren, terwijl de DrawingArea volledig als Controller moet fungeren.
+Calls om Shapes aan te passen of aan te maken worden vervangen met een bijbehorende Command die wordt uitgevoerd door de
+CommandManager. Zo wordt het veranderen van kleur/shape type/tool type ook door middel van Commands gedaan.
+
+Echter wordt een aanpassing van een Shape per repaint-call gedaan. Dus als je een Shape 20px naar rechts beweegt, dan zou je in de
+undo-stack van CommandManager met 20 dezelfde Commands zitten, waardoor je 20 keer op de Undo-knop zou moeten drukken om in principe
+één actie te undo-en. Dat is enorm inefficiënt, dus zou een Command pas moeten worden verstuurd nadat een actie afgerond is, oftewel
+als de muis-knop losgelaten is. Het versturen van Commands voor het aanpassen van Shapes zou vrijwel alleen in de MouseReleased
+event moeten gebeuren nadat de gebruiker klaar is met het verplaatsen/resizen van een Shape. 
+
+Maar de gebruiker moet wel visueel kunnen zien hoe de geselecteerde Shape aangepast wordt. Een oplossing dan is om een aparte Shape
+voor elke Shape die is geselecteerd aan te maken, en de originele Shape dan verbergen. Alle veranderingen worden visueel uitgevoerd
+op deze nieuwe Shape, en als de muisknop losgelaten is wordt pas een Command uitgevoerd die de veranderingen van de nieuwe Shape 
+in relatie tot de oude Shape terug toepast op de oude Shape. De oude Shape wordt dan weer zichtbaar en de nieuwe 'work in progress'
+Shape wordt verwijderd. 
+
+Deze nieuwe Shapes kunnen dan StagingShapes worden genoemd die de Shape klasse erven. De StagingShapes
+bevatten alleen de index van de originele Shape in de Shapes lijst waarvan de StagingShape afstamt. Als bij een Move/Resize
+Command de veranderingen moeten worden teruggevoerd naar de originele Shape, dan wordt de originele Shape gevonden door te kijken
+welke Shape hoort bij de gegeven index van de StagingShape in de lijst van Shapes.
+
+Voor File I/O kan de JFileChooser worden gebruikt. Bij het opslaan van de huidige Shapes op het scherm wordt er per Shape in de 
+Shapes lijst een lijn geschreven in de savefile die de ShapeType, ShapeColor, X-positie, Y-positie, breedte en hoogte afbeeldt, 
+elk gesplitst door een spatie. Echter moet voor de kleur van een Shape een aparte enum aangemaakt worden die de kleur-waarde bindt
+met een String-representatie van de kleur naam zodat de kleur-naam geprint kan worden in de savefile.
+
+Bij het laden van een savefile wordt het huidige scherm gecleard van alle Shapes, en wordt er per lijn een nieuwe Shape aangemaakt
+en toegevoegd aan de Shapes lijst gebaseerd op de geschreven attributen. 
